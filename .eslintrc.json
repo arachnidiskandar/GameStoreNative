@@ -36,6 +36,7 @@
       "react/jsx-props-no-spreading": "off",
       "react/prop-types": "off",
       "react-native/no-unused-styles": 2,
-      "prettier/prettier": ["error", {"endOfLine":"auto"}]
+      "prettier/prettier": ["error", {"endOfLine":"auto"}],
+      "global-require": 0
     }
 }
