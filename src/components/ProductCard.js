@@ -1,9 +1,10 @@
 /* eslint-disable import/no-dynamic-require */
 import styled from 'styled-components/native';
 import { Text, View, Image, Button, Alert } from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import images from '../../assets/images/images';
+import { CartContext } from '../contexts/CartContext';
 
 const ImageContainer = styled.View`
   flex: 1;
@@ -40,12 +41,18 @@ const ProductPrice = styled.Text`
 `;
 
 const ProductCard = ({ product }) => {
-  const { id, name, image, score, price } = product;
+  const [cartState, dispatch] = useContext(CartContext);
+  const { id, name, score, price } = product;
   const navigation = useNavigation();
   const handleViewCart = () => {
     navigation.navigate('Cart');
   };
   const handleAddCart = () => {
+    if (cartState.find((item) => item.id === id)) {
+      dispatch({ type: 'ADD_QTY', product });
+    } else {
+      dispatch({ type: 'ADD', product });
+    }
     Alert.alert(
       'Produto Adicionado',
       'Deseja ver o carrinho?',
@@ -72,7 +79,14 @@ const ProductCard = ({ product }) => {
         <ProductTitle>{name}</ProductTitle>
         <Text>{`Nota: ${score}`}</Text>
         <ProductPrice>{`$${price}`}</ProductPrice>
-        <Button onPress={handleAddCart} title="Adicionar ao Carrinho" />
+        <Button
+          onPress={handleAddCart}
+          title={
+            cartState.find((item) => item.id === id)
+              ? 'Adicionar mais'
+              : 'Adicionar ao Carrinho'
+          }
+        />
       </ProductInfoContainer>
     </ProductContainer>
   );

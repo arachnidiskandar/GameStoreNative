@@ -2,10 +2,25 @@ import React, { useReducer } from 'react';
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'ADD':
-      return [...state, action.product];
+    case 'ADD': {
+      const newItem = action.product;
+      newItem.qty = 1;
+      return [...state, newItem];
+    }
     case 'REMOVE':
       return state.filter((product) => product.id !== action.product.id);
+    case 'ADD_QTY': {
+      const updatedCart = state.map((item) =>
+        item.id === action.product.id ? { ...item, qty: item.qty + 1 } : item,
+      );
+      return [...updatedCart];
+    }
+    case 'REMOVE_QTY': {
+      const updatedCart = state.map((item) =>
+        item.id === action.product.id ? { ...item, qty: item.qty - 1 } : item,
+      );
+      return [...updatedCart];
+    }
     default:
       return state;
   }

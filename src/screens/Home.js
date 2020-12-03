@@ -11,7 +11,6 @@ const Home = ({ navigation }) => {
   const [cartState, dispatch] = useContext(CartContext);
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      tabBarBadge: 3,
       headerRight: () => (
         <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
           <Icon
@@ -20,7 +19,7 @@ const Home = ({ navigation }) => {
             name="shoppingcart"
             size={30}
           />
-          {cartState && (
+          {cartState.length > 0 && (
             <View
               style={{
                 backgroundColor: 'red',
@@ -41,17 +40,20 @@ const Home = ({ navigation }) => {
         </TouchableOpacity>
       ),
     });
-  }, [navigation]);
+  }, [navigation, cartState]);
   useEffect(() => {
     setProducts(data.default);
   }, []);
 
   return (
     <ScrollView style={globalStyles.container}>
-      {products &&
-        products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+      {products && (
+        <View style={{ padding: 10 }}>
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </View>
+      )}
     </ScrollView>
   );
 };

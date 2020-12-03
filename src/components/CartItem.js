@@ -7,32 +7,36 @@ import {
   Alert,
   TextInput,
   TouchableHighlight,
+  StyleSheet,
 } from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
+import images from '../../assets/images/images';
+import { CartContext } from '../contexts/CartContext';
 
-const ImageContainer = styled.View`
-  flex: 1;
-  align-items: flex-start;
-`;
 const StyledImage = styled.Image`
-  width: 70%;
+  flex: 1;
+  width: 100%;
   height: 50px;
-  border-radius: 15px;
+  align-self: center;
+  margin-right: 10px;
 `;
 const ProductInfoContainer = styled.View`
-  flex: 3;
-  justify-content: space-between;
+  flex: 4;
+  justify-content: space-around;
 `;
 const ProductContainer = styled.View`
   display: flex;
+  flex: 1;
   background-color: white;
   border-radius: 10px;
   width: 100%;
   flex-direction: row;
-  padding: 15px;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
-  elevation: 2;
+  elevation: 3;
+  height: 80px;
+  padding: 5px;
+  margin: 10px 0 5px;
 `;
 const ProductTitle = styled.Text`
   font-weight: bold;
@@ -42,12 +46,8 @@ const QntyContainer = styled.View`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-left: 10px;
 `;
-const ProductPrice = styled.Text`
-  font-size: 18px;
-  color: black;
-`;
+
 const TotalPrice = styled.Text`
   font-size: 16px;
   font-weight: bold;
@@ -55,7 +55,7 @@ const TotalPrice = styled.Text`
 `;
 
 const StyledIcon = styled(Icon)`
-  background-color: #3f50b5;
+  background-color: ${(props) => (props.disabled ? '#d3d3d3' : '#3f50b5')};
   border-radius: 10px;
   align-self: center;
   color: white;
@@ -64,18 +64,19 @@ const StyledIcon = styled(Icon)`
   elevation: 3;
 `;
 
-const DeleteButton = styled.Button`
+const RemoveContainer = styled.View`
+  position: absolute;
   background-color: red;
+  padding: 5px;
+  border-radius: 15px;
+  right: 0;
+  top: -10px;
 `;
 
-const ProductCard = () => {
-  const value = 0;
-  const handleChange = () => {
-    console.log('fui para o carrinho');
-  };
-  const deleteItem = () => {
-    console.log('deletado');
-  };
+const ProductCard = ({ product }) => {
+  const [cartState, dispatch] = useContext(CartContext);
+  const { id, name, price, qty } = product;
+
   const handleDelete = () => {
     Alert.alert(
       'Você tem certeza?',
@@ -83,7 +84,7 @@ const ProductCard = () => {
       [
         {
           text: 'sim',
-          onPress: deleteItem,
+          onPress: () => dispatch({ type: 'REMOVE', product }),
         },
         {
           text: 'Cancelar',
@@ -93,26 +94,33 @@ const ProductCard = () => {
       { cancelable: true },
     );
   };
+  const handleChangeQty = (type) => dispatch({ type, product });
+
   return (
     <ProductContainer>
-      <ImageContainer>
-        <StyledImage source={require('../../assets/images/fifa-18.png')} />
-        <DeleteButton onPress={handleDelete} title="Excluir" />
-      </ImageContainer>
-
+      <StyledImage source={images[id]} />
       <ProductInfoContainer>
-        <ProductTitle>Nome do Jogo</ProductTitle>
-
+        <ProductTitle numberOfLines={1}>{name}</ProductTitle>
         <QntyContainer>
-          <ProductPrice>$250</ProductPrice>
           <QntyContainer>
-            <StyledIcon name="minus" size={20} />
-            <TotalPrice>1</TotalPrice>
-            <StyledIcon name="plus" size={20} />
+            <TouchableHighlight
+              onPress={() => (qty > 1 ? handleChangeQty('REMOVE_QTY') : null)}
+            >
+              <StyledIcon disabled={qty === 1} name="minus" size={20} />
+            </TouchableHighlight>
+            <TotalPrice>{qty}</TotalPrice>
+            <TouchableHighlight onPress={() => handleChangeQty('ADD_QTY')}>
+              <StyledIcon name="plus" size={20} />
+            </TouchableHighlight>
           </QntyContainer>
-          <TotalPrice>Total: $123</TotalPrice>
+          <TotalPrice>Total: ${price * qty}</TotalPrice>
         </QntyContainer>
       </ProductInfoContainer>
+      <RemoveContainer>
+        <TouchableHighlight onPress={handleDelete}>
+          <Icon color="#fff" name="delete" size={20} />
+        </TouchableHighlight>
+      </RemoveContainer>
     </ProductContainer>
   );
 };

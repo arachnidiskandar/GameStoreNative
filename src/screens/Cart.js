@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components/native';
 import { Text, View, Image, Button, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import CartItem from '../components/CartItem';
 import { globalStyles } from '../../Styles';
+import { CartContext } from '../contexts/CartContext';
 
 const OrderSummaryContainer = styled.View`
   border-radius: 20px;
@@ -25,6 +26,7 @@ const TotalValue = styled(StyledText)`
 `;
 
 const Cart = () => {
+  const [cartState, dispatch] = useContext(CartContext);
   const handlePurchase = () => {
     Alert.alert('Compra Realizada com Sucesso', '', [
       {
@@ -34,15 +36,38 @@ const Cart = () => {
     ]);
     console.log('Comprei');
   };
+  function getTotalItens() {
+    const arrSubtotals = cartState.map((item) => item.qty * item.price);
+    return arrSubtotals.reduce((acc, current) => acc + current);
+  }
+  function getShippimentValue() {
+    if (getTotalItens() > 250) {
+      return 0;
+    }
+    return cartState.length * 10;
+  }
   return (
     <ScrollView style={globalStyles.container}>
-      <CartItem />
-      <OrderSummaryContainer>
-        <StyledText>Valor dos itens: $11</StyledText>
-        <StyledText>Frete: $10</StyledText>
-        <TotalValue>Valor total: $999</TotalValue>
-        <Button onPress={handlePurchase} title="Finalizar Compra" />
-      </OrderSummaryContainer>
+      {cartState.length === 0 && (
+        <View>
+          <Text>Está Vázio</Text>
+        </View>
+      )}
+      {cartState.length > 0 && (
+        <View style={{ padding: 5 }}>
+          {cartState.map((item) => (
+            <CartItem key={item.id} product={item} />
+          ))}
+          <OrderSummaryContainer>
+            <StyledText>Valor dos itens: ${getTotalItens()}</StyledText>
+            <StyledText>Frete: ${getShippimentValue()}</StyledText>
+            <TotalValue>
+              Valor total: ${getShippimentValue() + getTotalItens()}
+            </TotalValue>
+            <Button onPress={handlePurchase} title="Finalizar Compra" />
+          </OrderSummaryContainer>
+        </View>
+      )}
     </ScrollView>
   );
 };
