@@ -1,6 +1,9 @@
+/* eslint-disable import/no-dynamic-require */
 import styled from 'styled-components/native';
 import { Text, View, Image, Button, Alert } from 'react-native';
 import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import images from '../../assets/images/images';
 
 const ImageContainer = styled.View`
   flex: 1;
@@ -20,54 +23,56 @@ const ProductContainer = styled.View`
   border-radius: 10px;
   width: 100%;
   flex-direction: row;
-  padding: 15px;
-  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
   elevation: 2;
+  margin: 5px;
 `;
 const ProductTitle = styled.Text`
   font-weight: bold;
   font-size: 18px;
 `;
+
 const ProductPrice = styled.Text`
   font-weight: bold;
   font-size: 24px;
   color: black;
 `;
 
-const ProductCard = () => {
+const ProductCard = ({ product }) => {
+  const { id, name, image, score, price } = product;
+  const navigation = useNavigation();
   const handleViewCart = () => {
-    console.log('fui para o carrinho');
+    navigation.navigate('Cart');
+  };
+  const handleAddCart = () => {
+    Alert.alert(
+      'Produto Adicionado',
+      'Deseja ver o carrinho?',
+      [
+        {
+          text: 'Ver Carrinho',
+          onPress: handleViewCart,
+        },
+        {
+          text: 'Continuar Comprando',
+          style: 'cancel',
+        },
+      ],
+      { cancelable: true },
+    );
   };
   return (
     <ProductContainer>
       <ImageContainer>
-        <StyledImage source={require('../../assets/images/fifa-18.png')} />
+        <StyledImage source={images[id]} />
       </ImageContainer>
 
       <ProductInfoContainer>
-        <ProductTitle>Nome do Jogo</ProductTitle>
-        <Text>Nota: 250</Text>
-        <ProductPrice>$250</ProductPrice>
-        <Button
-          onPress={() =>
-            Alert.alert(
-              'Produto Adicionado',
-              'Deseja ver o carrinho?',
-              [
-                {
-                  text: 'Ver Carrinho',
-                  onPress: handleViewCart,
-                },
-                {
-                  text: 'Continuar Comprando',
-                  style: 'cancel',
-                },
-              ],
-              { cancelable: true },
-            )
-          }
-          title="Adicionar ao Carrinho"
-        />
+        <ProductTitle>{name}</ProductTitle>
+        <Text>{`Nota: ${score}`}</Text>
+        <ProductPrice>{`$${price}`}</ProductPrice>
+        <Button onPress={handleAddCart} title="Adicionar ao Carrinho" />
       </ProductInfoContainer>
     </ProductContainer>
   );

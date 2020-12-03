@@ -1,24 +1,35 @@
+import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Text, SafeAreaView } from 'react-native';
-import styled from 'styled-components/native';
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { color } from 'react-native-reanimated';
 import Cart from './src/screens/Cart';
 import Home from './src/screens/Home';
+import { CartProvider } from './src/contexts/CartContext';
 
-const StyledContainer = styled.SafeAreaView`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  background-color: #f5f5f5;
-  height: 100%;
-  padding: 0 20px;
-`;
+const Stack = createStackNavigator();
+
 export default function App() {
   return (
-    <StyledContainer>
-      {/* <Home /> */}
-      <Cart />
+    <>
+      <CartProvider>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerStyle: { backgroundColor: '#3f50b5' },
+              headerTintColor: '#fff',
+            }}
+            initialRouteName="GameStore"
+          >
+            <Stack.Screen name="GameStore" component={Home} />
+            <Stack.Screen name="Cart" component={Cart} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </CartProvider>
       <StatusBar style="auto" />
-    </StyledContainer>
+    </>
   );
 }
