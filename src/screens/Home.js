@@ -68,18 +68,21 @@ const Home = ({ navigation }) => {
     if (orderProductsBy === null) {
       setProducts(data.default);
     } else if (orderProductsBy === 'price') {
-      const sortedArr = products.sort(
+      const copyArrProducts = [...products];
+      const sortedArr = copyArrProducts.sort(
         (itemA, itemB) => parseFloat(itemA.price) - parseFloat(itemB.price),
       );
       setProducts(sortedArr);
     } else if (orderProductsBy === 'popularity') {
-      const sortedArr = products.sort(
+      const copyArrProducts = [...products];
+      const sortedArr = copyArrProducts.sort(
         (itemA, itemB) => parseFloat(itemB.score) - parseFloat(itemA.score),
       );
       setProducts(sortedArr);
     } else {
-      const sortedArr = products.sort(
-        (itemA, itemB) => itemA.name < itemB.name,
+      const copyArrProducts = [...products];
+      const sortedArr = copyArrProducts.sort(
+        (itemA, itemB) => itemA.name > itemB.name,
       );
       setProducts(sortedArr);
     }
