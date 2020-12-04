@@ -6,26 +6,26 @@ import {
   TextInput,
 } from 'react-native';
 import React, { useState, useEffect, useContext } from 'react';
-import Icon from 'react-native-vector-icons/AntDesign';
+// import Icon from 'react-native-vector-icons/AntDesign';
 import { Picker } from '@react-native-picker/picker';
 import ProductCard from '../components/ProductCard';
 import * as data from '../../products.json';
-import { globalStyles } from '../../Styles';
+import { globalStyles } from '../Styles';
 import { CartContext } from '../contexts/CartContext';
 
 const Home = ({ navigation }) => {
   const products = [...data.default];
-  const [cartState, dispatch] = useContext(CartContext);
+  const [cartState] = useContext(CartContext);
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
-          <Icon
+          {/* <Icon
             style={{ marginRight: 15 }}
             color="#fff"
             name="shoppingcart"
             size={30}
-          />
+          /> */}
           {cartState.length > 0 && (
             <View
               style={{
@@ -116,13 +116,6 @@ const Home = ({ navigation }) => {
           ))}
         </View>
       )}
-      {/* {filtredProducts.length > 0 && (
-        <View style={{ padding: 10 }}>
-          {filtredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </View>
-      )} */}
     </ScrollView>
   );
 };
