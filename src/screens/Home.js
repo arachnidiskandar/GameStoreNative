@@ -14,7 +14,7 @@ import { globalStyles } from '../../Styles';
 import { CartContext } from '../contexts/CartContext';
 
 const Home = ({ navigation }) => {
-  const [products, setProducts] = useState([]);
+  const products = [...data.default];
   const [cartState, dispatch] = useContext(CartContext);
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -49,55 +49,55 @@ const Home = ({ navigation }) => {
     });
   }, [navigation, cartState]);
 
-  const [productNameFilter, setProductNameFilter] = useState('');
-  const [filtredProducts, setFiltredProducts] = useState([]);
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const filteredProducts = products.filter(
-        (product) =>
-          !productNameFilter ||
-          product.name.includes(productNameFilter.toLocaleLowerCase()),
-      );
-      setFiltredProducts(filteredProducts);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [productNameFilter]);
+  // const [productNameFilter, setProductNameFilter] = useState('');
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     const patternFilter = new RegExp(productNameFilter, 'i');
+  //     const copyProducts = [...products];
+  //     const filtredArray = copyProducts.filter(
+  //       (product) => !productNameFilter || product.name.match(patternFilter),
+  //     );
+  //     setFilteredProducts(filtredArray);
+  //   }, 300);
+  //   return () => clearTimeout(timer);
+  // }, [productNameFilter]);
 
   const [orderProductsBy, setOrderProducts] = useState(null);
   useEffect(() => {
     if (orderProductsBy === null) {
-      setProducts(data.default);
+      setFilteredProducts([...products]);
     } else if (orderProductsBy === 'price') {
-      const copyArrProducts = [...products];
+      const copyArrProducts = [...filteredProducts];
       const sortedArr = copyArrProducts.sort(
         (itemA, itemB) => parseFloat(itemA.price) - parseFloat(itemB.price),
       );
-      setProducts(sortedArr);
+      setFilteredProducts(sortedArr);
     } else if (orderProductsBy === 'popularity') {
-      const copyArrProducts = [...products];
+      const copyArrProducts = [...filteredProducts];
       const sortedArr = copyArrProducts.sort(
         (itemA, itemB) => parseFloat(itemB.score) - parseFloat(itemA.score),
       );
-      setProducts(sortedArr);
+      setFilteredProducts(sortedArr);
     } else {
-      const copyArrProducts = [...products];
+      const copyArrProducts = [...filteredProducts];
       const sortedArr = copyArrProducts.sort(
         (itemA, itemB) => itemA.name > itemB.name,
       );
-      setProducts(sortedArr);
+      setFilteredProducts(sortedArr);
     }
   }, [orderProductsBy]);
 
   return (
     <ScrollView style={globalStyles.container}>
       <View>
-        <TextInput
+        {/* <TextInput
           style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
           onChangeText={(text) => setProductNameFilter(text)}
           placeholder="Nome do Produto..."
           multiline={false}
           value={productNameFilter}
-        />
+        /> */}
         <Picker
           selectedValue={orderProductsBy}
           onValueChange={(value) => setOrderProducts(value)}
@@ -109,20 +109,20 @@ const Home = ({ navigation }) => {
         </Picker>
       </View>
 
-      {filtredProducts.length === 0 && (
+      {filteredProducts && (
         <View style={{ padding: 10 }}>
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </View>
       )}
-      {filtredProducts.length > 0 && (
+      {/* {filtredProducts.length > 0 && (
         <View style={{ padding: 10 }}>
           {filtredProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </View>
-      )}
+      )} */}
     </ScrollView>
   );
 };
