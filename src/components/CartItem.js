@@ -62,6 +62,7 @@ const StyledIcon = styled(Icon)`
   font-weight: bold;
   font-size: 20px;
   elevation: 3;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
 `;
 
 const RemoveContainer = styled.View`
@@ -69,8 +70,10 @@ const RemoveContainer = styled.View`
   background-color: red;
   padding: 5px;
   border-radius: 15px;
-  right: 0;
+  right: -5px;
   top: -10px;
+  elevation: 3;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
 `;
 
 const ProductCard = ({ product }) => {

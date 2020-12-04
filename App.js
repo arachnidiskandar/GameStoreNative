@@ -1,11 +1,8 @@
 import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { Text, SafeAreaView } from 'react-native';
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { color } from 'react-native-reanimated';
 import Cart from './src/screens/Cart';
 import Home from './src/screens/Home';
 import { CartProvider } from './src/contexts/CartContext';
