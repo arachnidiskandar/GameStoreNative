@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components/native';
-import { Text, View, Image, Button, Alert } from 'react-native';
+import { Text, View, Button, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import CartItem from '../components/CartItem';
-import { globalStyles } from '../../Styles';
+import { globalStyles } from '../Styles';
 import { CartContext } from '../contexts/CartContext';
 
 const OrderSummaryContainer = styled.View`
@@ -28,13 +28,13 @@ const TotalValue = styled(StyledText)`
 const Cart = () => {
   const [cartState, dispatch] = useContext(CartContext);
   const handlePurchase = () => {
+    dispatch({ type: 'RESET' });
     Alert.alert('Compra Realizada com Sucesso', '', [
       {
         text: 'Ok',
         onPress: '',
       },
     ]);
-    console.log('Comprei');
   };
   function getTotalItens() {
     const arrSubtotals = cartState.map((item) => item.qty * item.price);
