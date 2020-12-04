@@ -3,55 +3,43 @@ import styled from 'styled-components/native';
 import { Text, View, Button, Alert } from 'react-native';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CartItem from '../components/CartItem';
 import { globalStyles } from '../Styles';
 import { CartContext } from '../contexts/CartContext';
+import OrderInfo from '../components/OrderInfo';
 
 const CartItens = styled.FlatList`
   flex-grow: 0;
 `;
-const OrderSummaryContainer = styled.View`
-  border-radius: 20px;
-  padding: 10px 20px;
-  background-color: white;
-  margin-top: 10px;
-  elevation: 3;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+
+const EmptyCartContainer = styled.View`
+  margin-top: 50%;
 `;
-const StyledText = styled.Text`
-  font-size: 16px;
-  margin: 5px 0;
+const EmptyCartText = styled.Text`
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  color: #979797;
+`;
+const EmptyCartIcon = styled(Icon)`
+  text-align: center;
 `;
 
-const TotalValue = styled(StyledText)`
-  font-weight: bold;
-  font-size: 20px;
-  margin-bottom: 10px;
-`;
+const EmptyCart = () => {
+  return (
+    <EmptyCartContainer>
+      <EmptyCartIcon color="#979797" name="cart-off" size={100} />
+      <EmptyCartText>Seu Carrinho está vázio</EmptyCartText>
+    </EmptyCartContainer>
+  );
+};
 
 const Cart = () => {
-  const [cartState, dispatch] = useContext(CartContext);
-  const handlePurchase = () => {
-    dispatch({ type: 'RESET' });
-    Alert.alert('Compra Realizada com Sucesso', '', [
-      {
-        text: 'Ok',
-        onPress: '',
-      },
-    ]);
-  };
-  function getTotalItens() {
-    const arrSubtotals = cartState.map((item) => item.qty * item.price);
-    return arrSubtotals.reduce((acc, current) => acc + current);
-  }
-  function getShippimentValue() {
-    if (getTotalItens() > 250) {
-      return 0;
-    }
-    return cartState.length * 10;
-  }
+  const [cartState] = useContext(CartContext);
+
   return (
-    <SafeAreaView style={globalStyles.container}>
+    <View>
       <CartItens
         data={cartState}
         renderItem={({ item }) => (
@@ -59,21 +47,13 @@ const Cart = () => {
             <CartItem key={item.id} product={item} />
           </View>
         )}
-        keyExtractor={(item) => item.id}
-        ListEmptyComponent={<Text>Está Vázio</Text>}
+        keyExtractor={(item) => item.id.toString()}
+        ListEmptyComponent={<EmptyCart />}
         extraData={cartState}
+        contentContainerStyle={{ paddingHorizontal: 20 }}
+        ListFooterComponent={<OrderInfo />}
       />
-      {cartState.length > 0 && (
-        <OrderSummaryContainer>
-          <StyledText>Valor dos itens: ${getTotalItens()}</StyledText>
-          <StyledText>Frete: ${getShippimentValue()}</StyledText>
-          <TotalValue>
-            Valor total: ${getShippimentValue() + getTotalItens()}
-          </TotalValue>
-          <Button onPress={handlePurchase} title="Finalizar Compra" />
-        </OrderSummaryContainer>
-      )}
-    </SafeAreaView>
+    </View>
   );
 };
 

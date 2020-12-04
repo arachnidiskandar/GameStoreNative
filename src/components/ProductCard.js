@@ -5,6 +5,7 @@ import React, { useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import images from '../../assets/images/images';
 import { CartContext } from '../contexts/CartContext';
+import theme from '../Styles';
 
 const ImageContainer = styled.View`
   flex: 1;
@@ -19,7 +20,6 @@ const ProductInfoContainer = styled.View`
   justify-content: space-between;
 `;
 const ProductContainer = styled.View`
-  display: flex;
   background-color: white;
   border-radius: 10px;
   width: 100%;
@@ -27,7 +27,7 @@ const ProductContainer = styled.View`
   padding: 10px;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
   elevation: 3;
-  margin: 5px;
+  margin: 10px 0;
 `;
 const ProductTitle = styled.Text`
   font-weight: bold;
@@ -45,7 +45,7 @@ const ProductCard = ({ product }) => {
   const { id, name, score, price } = product;
   const navigation = useNavigation();
   const handleViewCart = () => {
-    navigation.navigate('Cart');
+    navigation.navigate('Carrinho');
   };
   const handleAddCart = () => {
     if (cartState.find((item) => item.id === id)) {
@@ -77,9 +77,10 @@ const ProductCard = ({ product }) => {
 
       <ProductInfoContainer>
         <ProductTitle>{name}</ProductTitle>
-        <Text>{`Nota: ${score}`}</Text>
+        <Text numberOfLines={2}>{`Nota: ${score}`}</Text>
         <ProductPrice>{`$${price}`}</ProductPrice>
         <Button
+          color="#3f50b5"
           onPress={handleAddCart}
           title={
             cartState.find((item) => item.id === id)

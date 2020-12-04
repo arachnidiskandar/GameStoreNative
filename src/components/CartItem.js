@@ -6,8 +6,7 @@ import {
   Button,
   Alert,
   TextInput,
-  TouchableHighlight,
-  StyleSheet,
+  Pressable,
 } from 'react-native';
 import React, { useContext } from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -26,17 +25,15 @@ const ProductInfoContainer = styled.View`
   justify-content: space-around;
 `;
 const ProductContainer = styled.View`
-  display: flex;
   flex: 1;
   background-color: white;
   border-radius: 10px;
-  width: 100%;
   flex-direction: row;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
   elevation: 3;
   height: 80px;
   padding: 5px;
-  margin: 10px 0 5px;
+  margin: 15px 0 5px;
 `;
 const ProductTitle = styled.Text`
   font-weight: bold;
@@ -54,7 +51,7 @@ const TotalPrice = styled.Text`
   margin: 0 5px;
 `;
 
-const StyledIcon = styled(Icon)`
+const QtyIcon = styled(Icon)`
   background-color: ${(props) => (props.disabled ? '#d3d3d3' : '#3f50b5')};
   border-radius: 10px;
   align-self: center;
@@ -63,6 +60,12 @@ const StyledIcon = styled(Icon)`
   font-size: 20px;
   elevation: 3;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  opacity: ${(props) => (props.pressed ? 0.6 : 1)};
+`;
+
+const DeleteIcon = styled(Icon)`
+  color: white;
+  opacity: ${(props) => (props.pressed ? 0.6 : 1)};
 `;
 
 const RemoveContainer = styled.View`
@@ -106,23 +109,38 @@ const ProductCard = ({ product }) => {
         <ProductTitle numberOfLines={1}>{name}</ProductTitle>
         <QntyContainer>
           <QntyContainer>
-            <TouchableHighlight
-              onPress={() => (qty > 1 ? handleChangeQty('REMOVE_QTY') : null)}
+            <Pressable
+              disabled={qty === 1}
+              onPress={() => handleChangeQty('REMOVE_QTY')}
             >
-              <StyledIcon disabled={qty === 1} name="minus" size={20} />
-            </TouchableHighlight>
+              {({ pressed }) => (
+                <QtyIcon
+                  pressed={pressed}
+                  disabled={qty === 1}
+                  name="minus"
+                  size={20}
+                />
+              )}
+            </Pressable>
             <TotalPrice>{qty}</TotalPrice>
-            <TouchableHighlight onPress={() => handleChangeQty('ADD_QTY')}>
-              <StyledIcon name="plus" size={20} />
-            </TouchableHighlight>
+            <Pressable onPress={() => handleChangeQty('ADD_QTY')}>
+              {({ pressed }) => (
+                <QtyIcon pressed={pressed} name="plus" size={20} />
+              )}
+            </Pressable>
           </QntyContainer>
-          <TotalPrice>Total: ${price * qty}</TotalPrice>
+          <TotalPrice>
+            Total: ${Math.round((price * qty + Number.EPSILON) * 100) / 100}
+          </TotalPrice>
         </QntyContainer>
       </ProductInfoContainer>
+
       <RemoveContainer>
-        <TouchableHighlight onPress={handleDelete}>
-          <Icon color="#fff" name="delete" size={20} />
-        </TouchableHighlight>
+        <Pressable onPress={handleDelete}>
+          {({ pressed }) => (
+            <DeleteIcon pressed={pressed} name="delete" size={20} />
+          )}
+        </Pressable>
       </RemoveContainer>
     </ProductContainer>
   );
