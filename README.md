@@ -1,5 +1,5 @@
 # GameStoreNative
-> Uma App de loja de jogos em ReactNative.
+> Uma loja virtual de jogos em ReactNative.
 
 
 ![Preview-Screens]()
