@@ -1,8 +1,6 @@
 # GameStoreNative
 > Uma App de loja de jogos em ReactNative.
 
-[Live Demo](https://registration-authentication.web.app/).
-
 
 ![Preview-Screens]()
 ![Preview-Screens]()
