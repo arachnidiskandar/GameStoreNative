@@ -1,8 +1,8 @@
 # GameStoreNative
 > Uma loja virtual de jogos em ReactNative.
 
-<img src="https://github.com/arachnidiskandar/GameStoreNative/blob/master/Screenshot_20201206-100609.png" width="100" height="100">
-<img src="https://github.com/arachnidiskandar/GameStoreNative/blob/master/Screenshot_20201206-100658.png" width="100" height="100">
+<img src="https://github.com/arachnidiskandar/GameStoreNative/blob/master/Screenshot_20201206-100609.png" width="300" height="400">
+<img src="https://github.com/arachnidiskandar/GameStoreNative/blob/master/Screenshot_20201206-100658.png" width="300" height="400">
 
 ## Ferramentas utilizadas
 
