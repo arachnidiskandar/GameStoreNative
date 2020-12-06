@@ -2,8 +2,8 @@
 > Uma loja virtual de jogos em ReactNative.
 
 
-![Preview-Screens](https://github.com/arachnidiskandar/react-registration-authentication/blob/master/Screenshot_20201206-100609.png)
-![Preview-Screens](https://github.com/arachnidiskandar/react-registration-authentication/blob/master/Screenshot_20201206-100658.png)
+![Preview-Screens](https://github.com/arachnidiskandar/GameStoreNative/blob/master/Screenshot_20201206-100609.png)
+![Preview-Screens](https://github.com/arachnidiskandar/GameStoreNative/blob/master/Screenshot_20201206-100658.png)
 
 ## Ferramentas utilizadas
 
